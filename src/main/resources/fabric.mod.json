@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "restricted-crafting",
+	"version": "${version}",
+	"name": "Restricted Crafting",
+	"description": "Mod that adds permission-based restrictions to crafting",
+	"authors": [
+		"NikitaCartes"
+	],
+	"contact": {
+		"homepage": "https://discord.gg/UY4nhvUzaK",
+		"sources": "https://github.com/NikitaCartes/restricted-crafting"
+	},
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"xyz.nikitacartes.restrictedcrafting.RestrictedCrafting"
+		]
+	},
+	"mixins": [
+		"restricted-crafting.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.1",
+		"java": ">=17",
+		"fabric-permissions-api-v0": "*"
+	}
+}

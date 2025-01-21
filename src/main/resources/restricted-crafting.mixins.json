@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "xyz.nikitacartes.restrictedcrafting.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "SlotMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
