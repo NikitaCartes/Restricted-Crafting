@@ -1,3 +1,8 @@
+### 0.3.0
+##### Minecraft 1.21.1
+
+1) Add support for server-side translation
+
 ### 0.2.0
 ##### Minecraft 1.21.1
 

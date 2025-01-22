@@ -8,6 +8,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.CraftingResultSlot;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Slot.class)
@@ -20,7 +21,8 @@ public class SlotMixin {
             return original.call(playerEntity);
         }
         if (!Permissions.check(playerEntity.getCommandSource(), "restricted-crafting." + Registries.ITEM.getEntry(slot.getStack().getItem()).getIdAsString(), true)) {
-            playerEntity.sendMessage(Text.of("You don't have permission to craft this item!"), true);
+            playerEntity.sendMessage(Text.translatableWithFallback("text.restricted-crafting.restricted", "You do not have permission to craft this item!").formatted(Formatting.RED), true);
+            // playerEntity.getCommandSource().sendError(Text.translatableWithFallback("text.restricted-crafting.restricted", "You do not have permission to craft this item!"));
             return false;
         }
         return true;
