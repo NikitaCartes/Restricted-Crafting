@@ -3,6 +3,7 @@
   "package": "xyz.nikitacartes.restrictedcrafting.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CrafterBlockMixin",
     "SlotMixin"
   ],
   "injectors": {

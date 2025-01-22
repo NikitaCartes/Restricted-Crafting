@@ -1,9 +1,13 @@
-# Fabric Example Mod
+## Restricted Crafting Mod
 
-## Setup
+This mod allows you to restrict crafting of items based on permissions.  
+You can restrict crafting of any item by adding a permission node `restricted-crafting.<minecraft item>`.  
+For example, to restrict crafting of iron ingots, add `restricted-crafting.minecraft:iron_ingot` with value `false`.
 
-For setup instructions please see the [fabric documentation page](https://docs.fabricmc.net/develop/getting-started/setting-up-a-development-environment) that relates to the IDE that you are using.
+To restrict crafting for Crafter, add a permission node `restricted-crafting.crafter.<minecraft item>` in `default` LuckPerms group.
 
-## License
+### Dependencies
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This mod requires:
+- `Fabric API` [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api), [Modrinth](https://modrinth.com/mod/fabric-api)
+- `LuckPerms` [LuckPerms](https://luckperms.net/), [CurseForge](https://www.curseforge.com/minecraft/mc-mods/luckperms), [Modrinth](https://modrinth.com/mod/luckperms)

@@ -1,3 +1,8 @@
+### 0.2.0
+##### Minecraft 1.21.1
+
+1) Add restrictions for Crafter: `restricted-crafting.crafter.<minecraft item>` in Default LuckPerms Group, e.g. `restricted-crafting.crafter.minecraft:iron_ingot`
+
 ### 0.1.0
 ##### Minecraft 1.21.1
 
