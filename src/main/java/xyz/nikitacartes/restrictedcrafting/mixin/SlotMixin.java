@@ -25,6 +25,6 @@ public class SlotMixin {
             // playerEntity.getCommandSource().sendError(Text.translatableWithFallback("text.restricted-crafting.restricted", "You do not have permission to craft this item!"));
             return false;
         }
-        return true;
+        return original.call(playerEntity);
     }
 }

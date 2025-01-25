@@ -1,3 +1,8 @@
+### 0.4.0
+##### Minecraft 1.21.1
+
+1) Fix compatibility issue with 1.21.1
+
 ### 0.3.0
 ##### Minecraft 1.21.1
 
