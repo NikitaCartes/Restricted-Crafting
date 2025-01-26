@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CrafterBlockMixin",
-    "SlotMixin"
+    "CraftingScreenHandlerMixin",
+    "PlayerManagerMixin",
+    "ServerRecipeBookMixin"
   ],
   "injectors": {
     "defaultRequire": 1

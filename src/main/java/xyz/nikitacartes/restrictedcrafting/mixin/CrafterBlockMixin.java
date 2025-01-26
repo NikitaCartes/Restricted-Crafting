@@ -1,33 +1,26 @@
 package xyz.nikitacartes.restrictedcrafting.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.luckperms.api.util.Tristate;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.CrafterBlock;
-import net.minecraft.block.entity.CrafterBlockEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldEvents;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.RecipeEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Optional;
 
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.defaultGroup;
 
 @Mixin(CrafterBlock.class)
 public class CrafterBlockMixin {
 
-    @Inject(method = "craft(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/block/entity/CrafterBlockEntity;setCraftingTicksRemaining(I)V"),
-            cancellable = true)
-    private void addRestrictions(BlockState state, ServerWorld world, BlockPos pos, CallbackInfo ci, @Local ItemStack itemStack, @Local CrafterBlockEntity crafterBlockEntity) {
-        if (defaultGroup.getCachedData().getPermissionData().checkPermission("restricted-crafting.crafter." + Registries.ITEM.getEntry(itemStack.getItem()).getIdAsString()) == Tristate.FALSE) {
-            world.syncWorldEvent(WorldEvents.CRAFTER_FAILS, pos, 0);
-            ci.cancel();
+    @ModifyReturnValue(method = "getCraftingRecipe(Lnet/minecraft/world/World;Lnet/minecraft/recipe/input/CraftingRecipeInput;)Ljava/util/Optional;",
+            at = @At(value = "RETURN"))
+    private static Optional<RecipeEntry<CraftingRecipe>> doNotReturnRestrictedItem(Optional<RecipeEntry<CraftingRecipe>> original) {
+        if (original.isPresent() && defaultGroup.getCachedData().getPermissionData().checkPermission("restricted-crafting.crafter." + original.get().id().toString()) == Tristate.FALSE) {
+            return Optional.empty();
         }
+        return original;
     }
 }

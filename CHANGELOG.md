@@ -1,3 +1,10 @@
+### 0.5.0
+##### Minecraft 1.21.1
+
+1) Do not show crafting recipe if player does not have permission to craft it instead of cancelling crafting
+2) Do not shoe restricted crafting recipes in recipe book
+3) Do not show restricted crafting recipes in crafter
+
 ### 0.4.0
 ##### Minecraft 1.21.1
 
