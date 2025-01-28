@@ -1,5 +1,5 @@
 ### 0.6.0
-##### Minecraft 1.21.1
+##### Minecraft 1.21-1.21.1, 1.21.2-1.21.4
 
 1) Optimize crafter recipe check
 

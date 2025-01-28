@@ -48,7 +48,7 @@ public class RestrictedCrafting implements ModInitializer {
         Collection<RecipeEntry<?>> restrictedRecipes = new ArrayList<>();
         Collection<RecipeEntry<?>> newRecipes = new ArrayList<>(recipes);
         newRecipes.removeIf(recipe -> {
-            if (Permissions.check(player.getCommandSource(), "restricted-crafting." + recipe.id().toString(), true)) {
+            if (Permissions.check(player.getCommandSource(), "restricted-crafting." + stripRegistryKey(recipe), true)) {
                 return false;
             } else {
                 restrictedRecipes.add(recipe);
@@ -58,6 +58,10 @@ public class RestrictedCrafting implements ModInitializer {
         player.lockRecipes(restrictedRecipes);
 
         return newRecipes;
+    }
+
+    public static String stripRegistryKey(RecipeEntry<?> recipe) {
+        return recipe.id().getValue().toString();
     }
 
     public static void updateCrafterRestriction() {
