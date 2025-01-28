@@ -27,8 +27,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Permissions
-	include(modImplementation("me.lucko:fabric-permissions-api:${project.permissions_version}"))
-	compileOnly "net.luckperms:api:${project.luckperms_version}"
+	modImplementation("me.lucko:fabric-permissions-api:${project.permissions_version}")
+	compileOnly("net.luckperms:api:${project.luckperms_version}")
 }
 
 processResources {
