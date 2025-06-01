@@ -10,6 +10,10 @@ You can find all recipe ids in `server.jar/META-INF/versions/<version>/server-<v
 
 To restrict crafting for Crafter, add a permission node `restricted-crafting.crafter.<recipe_id>` in `default` LuckPerms group.
 
+[CurseForge](https://legacy.curseforge.com/minecraft/mc-mods/restricted-crafting), [Modrinth](https://modrinth.com/mod/restricted-crafting)
+
+[Discord](https://discord.gg/UY4nhvUzaK)
+
 ### Dependencies
 
 This mod requires:
