@@ -29,9 +29,6 @@ public class RestrictedCrafting implements ModInitializer {
     private void onStartServer(MinecraftServer server) {
         LuckPerms luckPerms = LuckPermsProvider.get();
 
-        LuckPermsListener luckPermsListener = new LuckPermsListener(luckPerms);
-        luckPermsListener.registerListeners();
-
         defaultGroup = luckPerms.getGroupManager().getGroup("default");
         if (defaultGroup == null) {
             return;
@@ -40,6 +37,13 @@ public class RestrictedCrafting implements ModInitializer {
         CachedPermissionData permissionData = defaultGroup.getCachedData().getPermissionData();
         permissionData.checkPermission("restricted-crafting");
         permissionData.checkPermission("restricted-crafting.crafter");
+
+        for(RecipeEntry<?> recipe : server.getRecipeManager().values()) {
+            permissionData.checkPermission("restricted-crafting." + stripRegistryKey(recipe));
+        }
+
+        LuckPermsListener luckPermsListener = new LuckPermsListener(luckPerms);
+        luckPermsListener.registerListeners();
 
         updateCrafterRestriction();
     }
