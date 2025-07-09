@@ -5,6 +5,7 @@
   "mixins": [
     "CrafterBlockMixin",
     "CraftingScreenHandlerMixin",
+    "PlayerManagerMixin",
     "ServerRecipeBookMixin"
   ],
   "injectors": {

@@ -39,8 +39,8 @@ public class RestrictedCrafting implements ModInitializer {
         permissionData.checkPermission("restricted-crafting.crafter");
 
         for(RecipeEntry<?> recipe : server.getRecipeManager().values()) {
-            permissionData.checkPermission("restricted-crafting." + stripRegistryKey(recipe));
-            permissionData.checkPermission("restricted-crafting.crafter." + stripRegistryKey(recipe));
+            permissionData.checkPermission("restricted-crafting." + recipe.id().toString());
+            permissionData.checkPermission("restricted-crafting.crafter." + recipe.id().toString());
         }
 
         LuckPermsListener luckPermsListener = new LuckPermsListener(luckPerms);
@@ -53,7 +53,7 @@ public class RestrictedCrafting implements ModInitializer {
         Collection<RecipeEntry<?>> restrictedRecipes = new ArrayList<>();
         Collection<RecipeEntry<?>> newRecipes = new ArrayList<>(recipes);
         newRecipes.removeIf(recipe -> {
-            if (Permissions.check(player.getCommandSource(), "restricted-crafting." + stripRegistryKey(recipe), true)) {
+            if (Permissions.check(player.getCommandSource(), "restricted-crafting." + recipe.id().toString(), true)) {
                 return false;
             } else {
                 restrictedRecipes.add(recipe);
@@ -63,10 +63,6 @@ public class RestrictedCrafting implements ModInitializer {
         player.lockRecipes(restrictedRecipes);
 
         return newRecipes;
-    }
-
-    public static String stripRegistryKey(RecipeEntry<?> recipe) {
-        return recipe.id().getValue().toString();
     }
 
     public static void updateCrafterRestriction() {
