@@ -1,3 +1,8 @@
+### 0.7.0
+##### Minecraft 1.21-1.21.1, 1.21.2-1.21.7
+
+1) Register permissions for all recipes at server startup
+
 ### 0.6.0
 ##### Minecraft 1.21-1.21.1, 1.21.2-1.21.5
 
