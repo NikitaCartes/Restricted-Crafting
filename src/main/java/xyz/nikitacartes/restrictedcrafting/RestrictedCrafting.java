@@ -40,6 +40,7 @@ public class RestrictedCrafting implements ModInitializer {
 
         for(RecipeEntry<?> recipe : server.getRecipeManager().values()) {
             permissionData.checkPermission("restricted-crafting." + stripRegistryKey(recipe));
+            permissionData.checkPermission("restricted-crafting.crafter." + stripRegistryKey(recipe));
         }
 
         LuckPermsListener luckPermsListener = new LuckPermsListener(luckPerms);
