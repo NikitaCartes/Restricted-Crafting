@@ -1,0 +1,140 @@
+# Central Stonecutter properties for RestrictedCrafting.
+# Top-level keys apply to every node; [<loader>."<version>"] sections apply to that node only.
+# Build scripts read these via property("...") after calling properties.tags(version, loader).
+
+# Mod
+mod_name = "Restricted Crafting"
+mod_id = "restricted-crafting"
+mod_version = "0.8.0"
+
+# Shared dependencies
+# LuckPerms platform-agnostic API (compileOnly; provided at runtime by the LuckPerms mod).
+#   https://repo.papermc.io / maven central: net.luckperms:api
+luckperms_version = "5.4"
+# MixinExtras (bundled on NeoForge; already shipped by fabric-loader on Fabric).
+mixinextras_version = "0.5.4"
+
+# ---------------------------------------------------------------------------
+# Fabric. Obfuscated nodes (<26.1) build with fabric-loom + officialMojangMappings
+# via build.fabric-obf.gradle.kts; 26.1+ ships Mojang-mapped, so those nodes use
+# build.fabric-deobf.gradle.kts.
+#   loader / fabric-api    https://fabricmc.net/develop/
+# ---------------------------------------------------------------------------
+
+[fabric."1.21"]
+minecraft_version = "1.21"
+loader_version = "0.19.3"
+fabric_version = "0.100.1+1.21"
+display_name = "[1.21, 1.21.1]"
+supported_versions = "1.21,1.21.1"
+supported_minecraft_version = ">=1.21- <1.21.2"
+
+[fabric."1.21.2"]
+minecraft_version = "1.21.2"
+loader_version = "0.19.3"
+fabric_version = "0.107.0+1.21.3"
+display_name = "[1.21.2 - 1.21.4]"
+supported_versions = "1.21.2,1.21.3,1.21.4"
+supported_minecraft_version = ">=1.21.2- <1.21.5"
+
+[fabric."1.21.5"]
+minecraft_version = "1.21.5"
+loader_version = "0.19.3"
+fabric_version = "0.119.2+1.21.5"
+display_name = "[1.21.5]"
+supported_versions = "1.21.5"
+supported_minecraft_version = ">=1.21.5- <1.21.6"
+
+[fabric."1.21.6"]
+minecraft_version = "1.21.6"
+loader_version = "0.19.3"
+fabric_version = "0.126.1+1.21.6"
+display_name = "[1.21.6, 1.21.7, 1.21.8]"
+supported_versions = "1.21.6,1.21.7,1.21.8"
+supported_minecraft_version = ">=1.21.6- <1.21.9"
+
+[fabric."1.21.9"]
+minecraft_version = "1.21.9"
+loader_version = "0.19.3"
+fabric_version = "0.134.0+1.21.9"
+display_name = "[1.21.9, 1.21.10]"
+supported_versions = "1.21.9,1.21.10"
+supported_minecraft_version = ">=1.21.9- <1.21.11"
+
+[fabric."1.21.11"]
+minecraft_version = "1.21.11"
+loader_version = "0.19.3"
+fabric_version = "0.139.4+1.21.11"
+display_name = "[1.21.11]"
+supported_versions = "1.21.11"
+supported_minecraft_version = ">=1.21.11- <26.1"
+
+[fabric."26.1"]
+minecraft_version = "26.1"
+loader_version = "0.19.3"
+fabric_version = "0.144.3+26.1"
+display_name = "[26.1]"
+supported_versions = "26.1,26.1.1,26.1.2"
+supported_minecraft_version = ">=26.1- <26.2"
+
+[fabric."26.2"]
+minecraft_version = "26.2"
+loader_version = "0.19.3"
+fabric_version = "0.152.2+26.2"
+display_name = "[26.2]"
+supported_versions = "26.2"
+supported_minecraft_version = ">=26.2-"
+
+# ---------------------------------------------------------------------------
+# NeoForge (build.neoforge.gradle.kts: ModDevGradle).
+#   neoforge_version  https://projects.neoforged.net/neoforged/neoforge
+# ---------------------------------------------------------------------------
+
+[neoforge."1.21"]
+minecraft_version = "1.21"
+neoforge_version = "21.0.167"
+display_name = "[NeoForge 1.21, 1.21.1]"
+supported_versions = "1.21,1.21.1"
+supported_minecraft_version = "[1.21,1.21.2)"
+
+[neoforge."1.21.2"]
+minecraft_version = "1.21.2"
+neoforge_version = "21.2.1-beta"
+display_name = "[NeoForge 1.21.2 - 1.21.4]"
+supported_versions = "1.21.2,1.21.3,1.21.4"
+supported_minecraft_version = "[1.21.2,1.21.5)"
+
+[neoforge."1.21.5"]
+minecraft_version = "1.21.5"
+neoforge_version = "21.5.97"
+display_name = "[NeoForge 1.21.5]"
+supported_versions = "1.21.5"
+supported_minecraft_version = "[1.21.5,1.21.6)"
+
+[neoforge."1.21.6"]
+minecraft_version = "1.21.6"
+neoforge_version = "21.6.20-beta"
+display_name = "[NeoForge 1.21.6, 1.21.7, 1.21.8]"
+supported_versions = "1.21.6,1.21.7,1.21.8"
+supported_minecraft_version = "[1.21.6,1.21.9)"
+
+[neoforge."1.21.9"]
+minecraft_version = "1.21.9"
+neoforge_version = "21.9.16-beta"
+display_name = "[NeoForge 1.21.9, 1.21.10]"
+supported_versions = "1.21.9,1.21.10"
+supported_minecraft_version = "[1.21.9,1.21.11)"
+
+[neoforge."1.21.11"]
+minecraft_version = "1.21.11"
+neoforge_version = "21.11.42"
+display_name = "[NeoForge 1.21.11]"
+supported_versions = "1.21.11"
+supported_minecraft_version = "[1.21.11,26.1)"
+
+[neoforge."26.1"]
+minecraft_version = "26.1"
+neoforge_version = "26.1.2.75"
+display_name = "[NeoForge 26.1]"
+supported_versions = "26.1,26.1.1,26.1.2"
+supported_minecraft_version = "[26.1,)"

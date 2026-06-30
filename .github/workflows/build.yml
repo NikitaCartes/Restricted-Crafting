@@ -1,7 +1,5 @@
-# Automatically build the project and run any configured tests for every push
-# and submitted pull request. This can help catch issues that only occur on
-# certain platforms or Java versions, and provides a first line of defence
-# against bad commits.
+# Build every Stonecutter node (Fabric + NeoForge, all supported Minecraft versions)
+# on every push and pull request.
 
 name: build
 
@@ -9,7 +7,6 @@ on: [ pull_request, push ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,14 +19,8 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: "${{ runner.os }}-restricted-crafting-${{ hashFiles('**/*.gradle*') }}"
-          restore-keys: |
-            ${{ runner.os }}-restricted-crafting-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build
         run: ./gradlew build
@@ -38,4 +29,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Artifacts
-          path: build/libs/
+          path: versions/*/build/libs/*.jar

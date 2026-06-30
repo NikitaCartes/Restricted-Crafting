@@ -3,7 +3,7 @@
 	"id": "restricted-crafting",
 	"version": "${version}",
 	"name": "Restricted Crafting",
-	"description": "Mod that adds permission-based restrictions to crafting",
+	"description": "Permission-based crafting restrictions via LuckPerms.",
 	"authors": [
 		"NikitaCartes"
 	],
@@ -12,7 +12,7 @@
 		"sources": "https://github.com/NikitaCartes/restricted-crafting"
 	},
 	"license": "MIT",
-	"environment": "*",
+	"environment": "server",
 	"entrypoints": {
 		"main": [
 			"xyz.nikitacartes.restrictedcrafting.RestrictedCrafting"
@@ -22,10 +22,10 @@
 		"restricted-crafting.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.15.0",
-		"minecraft": ">=1.21.3",
-		"java": ">=17",
-		"fabric-permissions-api-v0": "*",
+		"fabricloader": ">=0.16.0",
+		"minecraft": "${supported_minecraft_version}",
+		"java": ">=21",
+		"fabric-api": "*",
 		"luckperms": "*"
 	}
 }

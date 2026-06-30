@@ -1,12 +1,15 @@
 {
   "required": true,
   "package": "xyz.nikitacartes.restrictedcrafting.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "${refmap}",
   "mixins": [
     "CrafterBlockMixin",
     "CraftingScreenHandlerMixin",
+    "PlayerListMixin",
     "ServerRecipeBookMixin"
   ],
+  "minVersion": "0.8",
   "injectors": {
     "defaultRequire": 1
   }

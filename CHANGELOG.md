@@ -1,3 +1,14 @@
+### 0.8.0
+##### Minecraft 1.21 - 1.21.11, 26.1, 26.2 (Fabric) · 1.21 - 1.21.11, 26.1 (NeoForge)
+
+1) Multi-version + multi-loader build via Stonecutter (Fabric and NeoForge from one Mojang-mapped source tree)
+2) NeoForge support added (mod id `restrictedcrafting`)
+3) Only **crafting** recipes now get permission nodes - smelting/stonecutting/smithing/etc. are no longer advertised, since the mod can only enforce crafting
+4) Permission nodes are re-registered on datapack `/reload`, so recipes added by datapacks become restrictable without a restart
+5) Crafter (auto-crafter) restrictions now resolve LuckPerms inheritance and wildcards (e.g. `restricted-crafting.crafter.minecraft:*`)
+6) New command `/restrictedcrafting dump [file]` writes every managed permission node and its default-group state to a file (op level 4)
+7) Permission checks go straight through the LuckPerms API on both loaders (the `fabric-permissions-api` dependency is gone)
+
 ### 0.7.0
 ##### Minecraft 1.21-1.21.1, 1.21.2-1.21.7
 
