@@ -101,19 +101,32 @@ tasks.register<Copy>("collectJars") {
 
 publishMods {
     val modrinthToken = System.getenv("MODRINTH_TOKEN") ?: ""
+    val curseforgeToken = System.getenv("CURSEFORGE_TOKEN") ?: ""
+    val githubToken = System.getenv("GITHUB_TOKEN") ?: ""
     file = tasks.jar.get().archiveFile
-    dryRun = modrinthToken.isEmpty()
+    dryRun = modrinthToken.isEmpty() || curseforgeToken.isEmpty() || githubToken.isEmpty()
     displayName = "${property("display_name")} ${project.version}"
     version = project.version.toString()
-    changelog = rootProject.file("CHANGELOG.md").readText()
+    changelog = rootProject.file("RELEASE_NOTE.md").readText()
     type = STABLE
     modLoaders.add("neoforge")
 
     val targets = property("supported_versions").toString().split(",")
     modrinth {
-        projectId = "restricted-crafting"
+        projectId = "Tf9ijCH5"
         accessToken = modrinthToken
         targets.forEach(minecraftVersions::add)
         requires("luckperms")
+    }
+    curseforge {
+        projectId = "1278389"
+        accessToken = curseforgeToken
+        targets.forEach(minecraftVersions::add)
+        requires("luckperms")
+    }
+    // Uploads this node's jar into the single release created by the root publishGithub task.
+    github {
+        accessToken = githubToken
+        parent(rootProject.tasks.named("publishGithub"))
     }
 }
