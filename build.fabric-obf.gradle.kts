@@ -14,12 +14,13 @@ repositories {
     mavenCentral()
 }
 
+val javaVersion = property("java_version").toString().toInt()
+
 base.archivesName = "${property("mod_id")}-fabric-mc${property("minecraft_version")}"
 version = property("mod_version").toString()
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain { languageVersion.set(JavaLanguageVersion.of(25)) }
     withSourcesJar()
 }
 
@@ -43,7 +44,7 @@ dependencies {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    options.release.set(21)
+    options.release.set(javaVersion)
 }
 
 tasks.jar {
@@ -52,7 +53,8 @@ tasks.jar {
 
 val modExpansions = mapOf(
     "version" to project.version.toString(),
-    "supported_minecraft_version" to property("supported_minecraft_version").toString()
+    "supported_minecraft_version" to property("supported_minecraft_version").toString(),
+    "java_version" to javaVersion.toString()
 )
 
 tasks.processResources {

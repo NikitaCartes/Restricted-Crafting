@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Optional;
 
+import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.isCrafterRestricted;
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.recipeId;
-import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.restrictedRecipesForCrafter;
 
 /**
- * The auto-crafter has no player, so it follows a global policy derived from the LuckPerms default
- * group ({@link xyz.nikitacartes.restrictedcrafting.RestrictedCrafting#restrictedRecipesForCrafter}).
+ * The auto-crafter has no player, so it follows a global policy read from the LuckPerms default
+ * group ({@link xyz.nikitacartes.restrictedcrafting.RestrictedCrafting#isCrafterRestricted}).
  * {@code getPotentialResults} is the single point where the crafter resolves the recipe to make;
  * returning empty makes it refuse a restricted recipe. Matched by name (only overload), so no
  * version-specific descriptor is needed despite the Level/ServerLevel param change at 1.21.2.
@@ -24,7 +24,7 @@ public class CrafterBlockMixin {
 
     @ModifyReturnValue(method = "getPotentialResults", at = @At("RETURN"))
     private static Optional<RecipeHolder<CraftingRecipe>> rc$blockRestricted(Optional<RecipeHolder<CraftingRecipe>> original) {
-        if (original.isPresent() && restrictedRecipesForCrafter.contains(recipeId(original.get()))) {
+        if (original.isPresent() && isCrafterRestricted(recipeId(original.get()))) {
             return Optional.empty();
         }
         return original;

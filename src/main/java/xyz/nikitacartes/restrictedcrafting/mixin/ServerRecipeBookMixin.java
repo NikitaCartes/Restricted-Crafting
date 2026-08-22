@@ -19,9 +19,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 
 import java.util.function.Consumer;
 
-import xyz.nikitacartes.restrictedcrafting.integrations.Permissions;
-
-import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.PERM;
+import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.allowedFor;
 //?}
 
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.removeRestrictedRecipes;
@@ -49,7 +47,7 @@ public class ServerRecipeBookMixin {
         String id = recipeKey.identifier().toString();
         //?} else
         /*String id = recipeKey.location().toString();*/
-        if (!Permissions.check(player, PERM + "." + id, true)) {
+        if (!allowedFor(player, id)) {
             return;
         }
         original.call(instance, recipeKey, consumer);

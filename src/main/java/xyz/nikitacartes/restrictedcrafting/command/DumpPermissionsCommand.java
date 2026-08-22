@@ -18,11 +18,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
- * {@code /restrictedcrafting dump [file]} writes every managed permission node and its resolved
- * default-group state to a file in the game directory. Useful for seeding a LuckPerms config or
- * auditing what the mod controls. Requires operator level 4.
+ * {@code /restrictedcrafting dump [file]} writes two tables to a file in the game directory: every
+ * managed permission node with its resolved default-group state, then every crafting recipe listed
+ * under the item it outputs.
  */
 public final class DumpPermissionsCommand {
     private DumpPermissionsCommand() {}
@@ -44,20 +48,35 @@ public final class DumpPermissionsCommand {
         }
 
         CachedPermissionData permissionData = RestrictedCrafting.defaultGroup.getCachedData().getPermissionData();
-        List<String> ids = new ArrayList<>(RestrictedCrafting.craftingRecipeIds);
-        ids.sort(null);
+        Map<String, RestrictedCrafting.RecipeNodes> byRecipe = RestrictedCrafting.recipeNodes;
+
+        Set<String> nodes = new TreeSet<>();
+        Map<String, Set<String>> recipesByItem = new TreeMap<>();
+        byRecipe.forEach((id, recipe) -> {
+            nodes.addAll(recipe.player());
+            nodes.addAll(recipe.crafter());
+            for (String item : recipe.items()) {
+                recipesByItem.computeIfAbsent(item, key -> new TreeSet<>()).add(id);
+            }
+        });
 
         List<String> lines = new ArrayList<>();
         lines.add("# RestrictedCrafting permission nodes");
         lines.add("# columns: <node>\t<default-group state: allow|deny|unset>");
-        lines.add(RestrictedCrafting.PERM + "\t" + state(permissionData, RestrictedCrafting.PERM));
-        lines.add(RestrictedCrafting.PERM_CRAFTER + "\t" + state(permissionData, RestrictedCrafting.PERM_CRAFTER));
-        for (String id : ids) {
-            String craft = RestrictedCrafting.PERM + "." + id;
-            String crafter = RestrictedCrafting.PERM_CRAFTER + "." + id;
-            lines.add(craft + "\t" + state(permissionData, craft));
-            lines.add(crafter + "\t" + state(permissionData, crafter));
+        for (String root : List.of(RestrictedCrafting.PERM, RestrictedCrafting.PERM_CRAFTER, RestrictedCrafting.PERM_ITEM, RestrictedCrafting.PERM_CRAFTER_ITEM)) {
+            lines.add(root + "\t" + state(permissionData, root));
         }
+        for (String node : nodes) {
+            lines.add(node + "\t" + state(permissionData, node));
+        }
+
+        lines.add("");
+        lines.add("# Crafting recipes by output item. Deny every recipe listed for an item, or deny");
+        lines.add("# " + RestrictedCrafting.PERM_ITEM + ".<output_item> to cover all of them at once.");
+        lines.add("# Special recipes (firework rocket, map cloning, ...) build their result at craft");
+        lines.add("# time and are absent here; restrict those by recipe id above.");
+        lines.add("# columns: <output_item>\t<recipe_id>");
+        recipesByItem.forEach((item, ids) -> ids.forEach(id -> lines.add(item + "\t" + id)));
 
         Path path = Platform.gameDir().resolve(fileName).normalize();
         try {
@@ -67,8 +86,8 @@ public final class DumpPermissionsCommand {
             return 0;
         }
 
-        source.sendSuccess(() -> Component.literal("[RestrictedCrafting] Dumped " + ids.size() + " crafting recipe permissions to " + path), false);
-        return ids.size();
+        source.sendSuccess(() -> Component.literal("[RestrictedCrafting] Dumped " + nodes.size() + " permission nodes for " + byRecipe.size() + " crafting recipes to " + path), false);
+        return byRecipe.size();
     }
 
     private static String state(CachedPermissionData data, String node) {

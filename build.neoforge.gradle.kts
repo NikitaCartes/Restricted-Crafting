@@ -15,6 +15,8 @@ repositories {
     maven("https://maven.neoforged.net/releases")
 }
 
+val javaVersion = property("java_version").toString().toInt()
+
 // NeoForge mod ids may not contain '-'; the Fabric id stays "restricted-crafting".
 val neoModId = "restrictedcrafting"
 
@@ -22,7 +24,7 @@ base.archivesName = "${property("mod_id")}-neoforge-mc${property("minecraft_vers
 version = property("mod_version").toString()
 
 java {
-    toolchain { languageVersion.set(JavaLanguageVersion.of(21)) }
+    toolchain { languageVersion.set(JavaLanguageVersion.of(25)) }
     withSourcesJar()
 }
 
@@ -59,7 +61,7 @@ dependencies {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    options.release.set(21)
+    options.release.set(javaVersion)
 }
 
 val modExpansions = mapOf(
