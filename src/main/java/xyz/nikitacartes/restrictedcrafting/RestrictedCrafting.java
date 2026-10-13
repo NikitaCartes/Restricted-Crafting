@@ -162,17 +162,8 @@ public class RestrictedCrafting {
     }
 
     public static Collection<RecipeHolder<?>> removeRestrictedRecipes(Collection<RecipeHolder<?>> recipes, ServerPlayer player) {
-        Collection<RecipeHolder<?>> restricted = new ArrayList<>();
         Collection<RecipeHolder<?>> allowed = new ArrayList<>(recipes);
-        allowed.removeIf(recipe -> {
-            if (allowedFor(player, recipeId(recipe))) {
-                return false;
-            } else {
-                restricted.add(recipe);
-                return true;
-            }
-        });
-        player.resetRecipes(restricted);
+        allowed.removeIf(recipe -> !allowedFor(player, recipeId(recipe)));
         return allowed;
     }
 

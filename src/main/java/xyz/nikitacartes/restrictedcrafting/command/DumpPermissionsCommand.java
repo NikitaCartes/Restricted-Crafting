@@ -63,9 +63,6 @@ public final class DumpPermissionsCommand {
         List<String> lines = new ArrayList<>();
         lines.add("# RestrictedCrafting permission nodes");
         lines.add("# columns: <node>\t<default-group state: allow|deny|unset>");
-        for (String root : List.of(RestrictedCrafting.PERM, RestrictedCrafting.PERM_CRAFTER, RestrictedCrafting.PERM_ITEM, RestrictedCrafting.PERM_CRAFTER_ITEM)) {
-            lines.add(root + "\t" + state(permissionData, root));
-        }
         for (String node : nodes) {
             lines.add(node + "\t" + state(permissionData, node));
         }
