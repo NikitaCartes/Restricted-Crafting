@@ -1,10 +1,6 @@
 package xyz.nikitacartes.restrictedcrafting.mixin;
 
-// Pre-1.21.2 only: before the recipe-display rework, the full recipe registry was pushed to clients
-// via ClientboundUpdateRecipesPacket from PlayerList (on join and on datapack reload). Filtering it
-// per player removes restricted recipes from the client entirely. On 1.21.2+ this is unnecessary
-// (the registry packet no longer carries the recipe list, ServerRecipeBookMixin handles the book),
-// so this mixin compiles to an empty no-op there.
+// Pre-1.21.2 only: filter the registry packet per player. No-op on 1.21.2+ (see ServerRecipeBookMixin).
 //? if <1.21.2 {
 /*import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

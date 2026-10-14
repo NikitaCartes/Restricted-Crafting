@@ -13,11 +13,8 @@ import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.isCrafterRe
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.recipeId;
 
 /**
- * The auto-crafter has no player, so it follows a global policy read from the LuckPerms default
- * group ({@link xyz.nikitacartes.restrictedcrafting.RestrictedCrafting#isCrafterRestricted}).
- * {@code getPotentialResults} is the single point where the crafter resolves the recipe to make;
- * returning empty makes it refuse a restricted recipe. Matched by name (only overload), so no
- * version-specific descriptor is needed despite the Level/ServerLevel param change at 1.21.2.
+ * Crafter refusal via the default group: empty result = no craft. Matched by name, so the 1.21.2
+ * Level/ServerLevel param change needs no branches.
  */
 @Mixin(CrafterBlock.class)
 public class CrafterBlockMixin {

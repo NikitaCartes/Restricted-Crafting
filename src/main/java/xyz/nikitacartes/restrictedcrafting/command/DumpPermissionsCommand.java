@@ -1,7 +1,6 @@
 package xyz.nikitacartes.restrictedcrafting.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.luckperms.api.cacheddata.CachedPermissionData;
 import net.luckperms.api.util.Tristate;
@@ -11,7 +10,12 @@ import net.minecraft.network.chat.Component;
 
 import xyz.nikitacartes.restrictedcrafting.RestrictedCrafting;
 import xyz.nikitacartes.restrictedcrafting.integrations.Permissions;
-import xyz.nikitacartes.restrictedcrafting.integrations.Platform;
+
+//? if fabric {
+import net.fabricmc.loader.api.FabricLoader;
+//?} else {
+/*import net.neoforged.fml.loading.FMLPaths;
+*///?}
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,11 +27,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/**
- * {@code /restrictedcrafting dump [file]} writes two tables to a file in the game directory: every
- * managed permission node with its resolved default-group state, then every crafting recipe listed
- * under the item it outputs.
- */
+/** /restrictedcrafting dump: node table + recipes-by-item table, into restricted-crafting/permissions.txt. */
 public final class DumpPermissionsCommand {
     private DumpPermissionsCommand() {}
 
@@ -35,12 +35,10 @@ public final class DumpPermissionsCommand {
         dispatcher.register(Commands.literal("restrictedcrafting")
                 .requires(Permissions.requireLevel(4))
                 .then(Commands.literal("dump")
-                        .executes(ctx -> dump(ctx, "restricted-crafting-permissions.txt"))
-                        .then(Commands.argument("file", StringArgumentType.string())
-                                .executes(ctx -> dump(ctx, StringArgumentType.getString(ctx, "file"))))));
+                        .executes(DumpPermissionsCommand::dump)));
     }
 
-    private static int dump(CommandContext<CommandSourceStack> ctx, String fileName) {
+    private static int dump(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
         if (RestrictedCrafting.defaultGroup == null) {
             source.sendFailure(Component.literal("[RestrictedCrafting] LuckPerms 'default' group not available."));
@@ -75,8 +73,13 @@ public final class DumpPermissionsCommand {
         lines.add("# columns: <output_item>\t<recipe_id>");
         recipesByItem.forEach((item, ids) -> ids.forEach(id -> lines.add(item + "\t" + id)));
 
-        Path path = Platform.gameDir().resolve(fileName).normalize();
+        //? if fabric {
+        Path path = FabricLoader.getInstance().getGameDir().resolve("restricted-crafting/permissions.txt");
+        //?} else {
+        /*Path path = FMLPaths.GAMEDIR.get().resolve("restricted-crafting/permissions.txt");
+        *///?}
         try {
+            Files.createDirectories(path.getParent());
             Files.write(path, lines);
         } catch (IOException e) {
             source.sendFailure(Component.literal("[RestrictedCrafting] Failed to write " + path + ": " + e.getMessage()));

@@ -24,12 +24,7 @@ import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.allowedFor;
 
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.removeRestrictedRecipes;
 
-/**
- * Hides restricted recipes from a player's recipe book. {@code addRecipes} (Yarn
- * {@code unlockRecipes}) is filtered on every version; on 1.21.2+ the per-recipe display callback
- * inside {@code sendInitialRecipeBook} is additionally suppressed so the initial book never lists a
- * restricted recipe. (Pre-1.21.2, the global recipe registry is filtered in PlayerListMixin instead.)
- */
+/** Hides restricted recipes from the book (pre-1.21.2 the registry is filtered in PlayerListMixin). */
 @Mixin(ServerRecipeBook.class)
 public class ServerRecipeBookMixin {
 

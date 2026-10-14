@@ -13,14 +13,8 @@ import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.allowedFor;
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.recipeId;
 
 /**
- * The real crafting gate. {@code RecipeCraftingHolder.setRecipeUsed(player, recipe)} (Yarn
- * {@code shouldCraftRecipe}) is what {@code CraftingMenu.slotChangedCraftingGrid} consults before
- * populating the result slot, for both the crafting table (3x3) and the inventory grid (2x2).
- * Forcing it to {@code false} leaves the output slot empty, so a player without permission cannot
- * craft the recipe regardless of the {@code doLimitedCrafting} gamerule. The permission check runs
- * before {@code original.call}, so the gamerule and {@code isSpecial} checks never run for a
- * disallowed recipe and special recipes are gated too. A cancelling {@code @Inject} would work as
- * well, but {@code @WrapMethod} nests with other mods that wrap the same method.
+ * The real gate: deny here and the result slot stays empty (3x3, 2x2, special recipes).
+ * WrapMethod nests with other mods wrapping the same method.
  */
 @Mixin(RecipeCraftingHolder.class)
 public interface CraftingScreenHandlerMixin {

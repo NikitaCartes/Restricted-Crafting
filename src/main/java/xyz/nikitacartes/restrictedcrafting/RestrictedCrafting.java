@@ -51,31 +51,28 @@ public class RestrictedCrafting {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("RestrictedCrafting");
 
-    /** Base permission node. The crafting-table/inventory gate checks {@code <PERM>.<recipe-id>}. */
+    /** Player gate: {@code <PERM>.<recipe-id>}. */
     public static final String PERM = "restricted-crafting";
-    /** The auto-crafter (block) policy checks {@code <PERM_CRAFTER>.<recipe-id>} against the default group. */
+    /** Crafter gate, checked against the default group. */
     public static final String PERM_CRAFTER = "restricted-crafting.crafter";
-    /** Denies every crafting recipe that outputs an item: {@code <PERM_ITEM>.<item-id>}. */
+    /** Denies every recipe outputting an item. */
     public static final String PERM_ITEM = "restricted-crafting.item";
-    /** The auto-crafter equivalent of {@link #PERM_ITEM}. */
+    /** Crafter equivalent of {@link #PERM_ITEM}. */
     public static final String PERM_CRAFTER_ITEM = "restricted-crafting.crafter.item";
 
     public static LuckPerms luckPerms;
     public static Group defaultGroup;
 
     /**
-     * Every node that must be allowed for one recipe to be craftable: the recipe's own node first,
-     * then one per output item. Built once per datapack load, so the hot path never concatenates a
-     * node string and an auto-crafter craft costs one map lookup plus one LuckPerms cache lookup.
+     * Nodes that must all allow a recipe: own node first, then one per output item.
+     * Built once per datapack load so the hot path never concatenates strings.
      *
-     * @param items output item ids, empty for a special recipe whose result is only known at craft time
+     * @param items output item ids, empty for special recipes (result known only at craft time)
      */
     public record RecipeNodes(List<String> player, List<String> crafter, List<String> items) {}
 
-    /** Recipe id to its nodes, for every CRAFTING recipe. Replaced wholesale, hence volatile. */
+    /** Recipe id -> nodes, rebuilt per datapack load (volatile: replaced wholesale). */
     public static volatile Map<String, RecipeNodes> recipeNodes = new HashMap<>();
-
-    // ---- shared init, called from each loader's events -------------------------------------------
 
     private static void onServerStarted(MinecraftServer server) {
         luckPerms = LuckPermsProvider.get();
@@ -89,19 +86,29 @@ public class RestrictedCrafting {
         registerNodes(server);
     }
 
-    /** Re-run on every datapack reload so recipes added by datapacks get nodes and stay enforceable. */
+    /** Re-run per datapack reload so datapack recipes stay enforceable. */
     private static void onReload(MinecraftServer server) {
         if (defaultGroup == null) {
             return;
         }
         registerNodes(server);
+        // Evict already-granted denials (the filter only gates new grants; resetting there double-sends).
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            List<RecipeHolder<?>> denied = new ArrayList<>();
+            for (RecipeHolder<?> recipe : server.getRecipeManager().getRecipes()) {
+                if (recipe.value() instanceof CraftingRecipe && !allowedFor(player, recipeId(recipe))) {
+                    denied.add(recipe);
+                }
+            }
+            if (!denied.isEmpty()) {
+                player.resetRecipes(denied);
+            }
+        }
     }
 
     /**
-     * Register a permission node for every CRAFTING recipe and for every item those recipes output,
-     * so admins see them in the LuckPerms editor. Non-crafting recipes (smelting, stonecutting,
-     * smithing, ...) are intentionally skipped: this mod only enforces crafting, so advertising
-     * nodes it cannot enforce would be misleading.
+     * Advertise one node per CRAFTING recipe + per output item. Skips smelting/stonecutting/etc:
+     * only crafting is enforced, so other nodes would mislead.
      */
     public static void registerNodes(MinecraftServer server) {
         if (defaultGroup == null) {
@@ -135,11 +142,7 @@ public class RestrictedCrafting {
         recipeNodes = byRecipe;
     }
 
-    /**
-     * Item ids this recipe can produce. A recipe with a variable result (suspicious stew) reports
-     * every variant. A special recipe reports nothing, because {@code CustomRecipe} declares no
-     * display: its output is known only once the grid is filled, so it stays restricted by recipe id.
-     */
+    /** Item ids a recipe can output (every variant); empty for special recipes, gated by id. */
     private static Set<String> outputItems(MinecraftServer server, RecipeHolder<?> recipe) {
         Set<String> items = new LinkedHashSet<>();
         //? if <1.21.2 {
@@ -167,7 +170,7 @@ public class RestrictedCrafting {
         return allowed;
     }
 
-    /** Whether this player may craft this recipe: its own node and every output-item node must allow it. */
+    /** Player may craft id only if every node allows it. */
     public static boolean allowedFor(ServerPlayer player, String id) {
         for (String node : nodesFor(id).player()) {
             if (!Permissions.check(player, node, true)) {
@@ -178,11 +181,8 @@ public class RestrictedCrafting {
     }
 
     /**
-     * Whether the auto-crafter must refuse this recipe, asked of the default group on every craft.
-     * {@code checkPermission} resolves inheritance and wildcards and is itself a map lookup into a
-     * cache that LuckPerms invalidates on any change, so caching the answer here would only add a
-     * second copy that goes stale when a parent group or a network sync changes the outcome. A
-     * recipe is denied when any of its nodes is explicitly FALSE.
+     * Crafter refusal per the default group. Live LuckPerms lookup (resolves inheritance/wildcards);
+     * no local copy to go stale. Denied if any node is explicitly FALSE.
      */
     public static boolean isCrafterRestricted(String id) {
         Group group = defaultGroup;
@@ -198,7 +198,7 @@ public class RestrictedCrafting {
         return false;
     }
 
-    /** Falls back to the recipe node alone for a recipe that arrived after the last registration pass. */
+    /** Fallback for recipes that arrived after the last registration pass. */
     private static RecipeNodes nodesFor(String id) {
         RecipeNodes nodes = recipeNodes.get(id);
         return nodes != null
@@ -206,7 +206,6 @@ public class RestrictedCrafting {
                 : new RecipeNodes(List.of(PERM + "." + id), List.of(PERM_CRAFTER + "." + id), List.of());
     }
 
-    /** The recipe's namespaced id as the permission-node suffix. */
     public static String recipeId(RecipeHolder<?> recipe) {
         //? if <1.21.2 {
         /*return recipe.id().toString();
@@ -216,8 +215,6 @@ public class RestrictedCrafting {
         return recipe.id().identifier().toString();
         //?}
     }
-
-    // ---- loader entrypoints ----------------------------------------------------------------------
 
     //? if fabric {
     @Override

@@ -20,7 +20,7 @@ base.archivesName = "${property("mod_id")}-fabric-mc${property("minecraft_versio
 version = property("mod_version").toString()
 
 java {
-    toolchain { languageVersion.set(JavaLanguageVersion.of(25)) }
+    toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion)) }
     withSourcesJar()
 }
 
@@ -37,13 +37,16 @@ dependencies {
     implementation(fabricApi.module("fabric-command-api-v2", property("fabric_version").toString()))
     implementation(fabricApi.module("fabric-api-base", property("fabric_version").toString()))
 
-    // LuckPerms API (provided at runtime by the LuckPerms mod)
     compileOnly("net.luckperms:api:${property("luckperms_version")}")
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(javaVersion)
+}
+
+tasks.named("compileJava") {
+    dependsOn(tasks.named("stonecutterGenerate"))
 }
 
 tasks.jar {

@@ -24,7 +24,7 @@ base.archivesName = "${property("mod_id")}-neoforge-mc${property("minecraft_vers
 version = property("mod_version").toString()
 
 java {
-    toolchain { languageVersion.set(JavaLanguageVersion.of(25)) }
+    toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion)) }
     withSourcesJar()
 }
 
@@ -55,7 +55,6 @@ fun DependencyHandlerScope.implementAndJarJar(notation: String, version: String)
 dependencies {
     implementAndJarJar("io.github.llamalad7:mixinextras-neoforge:${property("mixinextras_version")}", property("mixinextras_version").toString())
 
-    // LuckPerms API (provided at runtime by the LuckPerms mod)
     compileOnly("net.luckperms:api:${property("luckperms_version")}")
 }
 
@@ -82,11 +81,14 @@ tasks.processResources {
     filesMatching("restricted-crafting.mixins.json") {
         filter { it.replace("\"refmap\": \"\${refmap}\",", "") }
     }
-    // Fabric-only metadata is irrelevant on NeoForge.
     exclude("fabric.mod.json")
 }
 
 tasks.named("createMinecraftArtifacts") {
+    dependsOn(tasks.named("stonecutterGenerate"))
+}
+
+tasks.named("compileJava") {
     dependsOn(tasks.named("stonecutterGenerate"))
 }
 
