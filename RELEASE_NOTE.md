@@ -1,4 +1,4 @@
-**Minecraft 1.21 - 1.21.11, 26.1 - 26.3** · Fabric and NeoForge · requires LuckPerms
+**Minecraft 1.21 - 1.21.11, 26.1 - 26.3** Fabric and NeoForge
 
 ### Restrict by output item
 
