@@ -2,7 +2,7 @@ plugins {
     id("dev.kikugie.stonecutter")
     id("me.modmuss50.mod-publish-plugin") version "2.2.0"
 }
-stonecutter active "1.21.11-fabric"
+stonecutter active "26.1-fabric"
 
 stonecutter parameters {
     // Loader flag constants: `//? if fabric { ... }` / `//? if neoforge { ... }`.

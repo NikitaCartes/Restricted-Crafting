@@ -20,9 +20,7 @@ stonecutter {
             versions("$mc-fabric" to mc).buildscript("build.fabric-obf.gradle.kts")
         }
         // Fabric, deobfuscated runtime (Minecraft 26.1+ ships Mojang-mapped).
-        listOf("26.1", "26.2").forEach { mc ->
-            versions("$mc-fabric" to mc).buildscript("build.fabric-deobf.gradle.kts")
-        }
+        versions("26.1-fabric" to "26.1").buildscript("build.fabric-deobf.gradle.kts")
         // NeoForge.
         listOf("1.21", "1.21.2", "1.21.11", "26.1").forEach { mc ->
             versions("$mc-neoforge" to mc).buildscript("build.neoforge.gradle.kts")
