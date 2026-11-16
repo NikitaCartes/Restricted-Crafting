@@ -60,17 +60,17 @@ public final class DumpPermissionsCommand {
 
         List<String> lines = new ArrayList<>();
         lines.add("# RestrictedCrafting permission nodes");
-        lines.add("# columns: <node>\t<default-group state: allow|deny|unset>");
+        lines.add("# columns: <node>\t<default state: true|false|undefined>");
         for (String node : nodes) {
             lines.add(node + "\t" + state(permissionData, node));
         }
 
         lines.add("");
-        lines.add("# Crafting recipes by output item. Deny every recipe listed for an item, or deny");
-        lines.add("# " + RestrictedCrafting.PERM_ITEM + ".<output_item> to cover all of them at once.");
+        lines.add("# Crafting recipes by output item. Set false for every recipe listed for an item, or set false for");
+        lines.add("# " + RestrictedCrafting.PERM_ITEM + ".<item_id> to cover all of them at once.");
         lines.add("# Special recipes (firework rocket, map cloning, ...) build their result at craft");
         lines.add("# time and are absent here; restrict those by recipe id above.");
-        lines.add("# columns: <output_item>\t<recipe_id>");
+        lines.add("# columns: <item_id>\t<recipe_id>");
         recipesByItem.forEach((item, ids) -> ids.forEach(id -> lines.add(item + "\t" + id)));
 
         //? if fabric {
@@ -92,6 +92,6 @@ public final class DumpPermissionsCommand {
 
     private static String state(CachedPermissionData data, String node) {
         Tristate tristate = data.checkPermission(node);
-        return tristate == Tristate.TRUE ? "allow" : tristate == Tristate.FALSE ? "deny" : "unset";
+        return tristate == Tristate.TRUE ? "true" : tristate == Tristate.FALSE ? "false" : "undefined";
     }
 }

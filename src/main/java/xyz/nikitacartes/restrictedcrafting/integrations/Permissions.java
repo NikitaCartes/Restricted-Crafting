@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 public final class Permissions {
     private Permissions() {}
 
-    /** @param def used when LuckPerms is absent or the node is UNDEFINED (fail-open: only explicit deny restricts). */
+    /** @param def used when LuckPerms is absent or the node is UNDEFINED (fail-open: only explicit false restricts). */
     public static boolean check(ServerPlayer player, String node, boolean def) {
         LuckPerms luckPerms = RestrictedCrafting.luckPerms;
         if (luckPerms == null) {

@@ -51,11 +51,11 @@ public class RestrictedCrafting {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("RestrictedCrafting");
 
-    /** Player gate: {@code <PERM>.<recipe-id>}. */
+    /** Player gate: {@code <PERM>.<recipe_id>}. */
     public static final String PERM = "restricted-crafting";
     /** Crafter gate, checked against the default group. */
     public static final String PERM_CRAFTER = "restricted-crafting.crafter";
-    /** Denies every recipe outputting an item. */
+    /** Set to false to block every recipe outputting an item. */
     public static final String PERM_ITEM = "restricted-crafting.item";
     /** Crafter equivalent of {@link #PERM_ITEM}. */
     public static final String PERM_CRAFTER_ITEM = "restricted-crafting.crafter.item";
@@ -64,7 +64,7 @@ public class RestrictedCrafting {
     public static Group defaultGroup;
 
     /**
-     * Nodes that must all allow a recipe: own node first, then one per output item.
+     * Nodes that must all be true for a recipe: own node first, then one per output item.
      * Built once per datapack load so the hot path never concatenates strings.
      *
      * @param items output item ids, empty for special recipes (result known only at craft time)
@@ -170,7 +170,7 @@ public class RestrictedCrafting {
         return allowed;
     }
 
-    /** Player may craft id only if every node allows it. */
+    /** Player may craft id only if every node is true. */
     public static boolean allowedFor(ServerPlayer player, String id) {
         for (String node : nodesFor(id).player()) {
             if (!Permissions.check(player, node, true)) {
@@ -182,7 +182,7 @@ public class RestrictedCrafting {
 
     /**
      * Crafter refusal per the default group. Live LuckPerms lookup (resolves inheritance/wildcards);
-     * no local copy to go stale. Denied if any node is explicitly FALSE.
+     * no local copy to go stale. Blocked if any node is explicitly false.
      */
     public static boolean isCrafterRestricted(String id) {
         Group group = defaultGroup;

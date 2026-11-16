@@ -1,3 +1,8 @@
+### 1.0.1
+##### Minecraft 1.21.x, 26.1-26.3, Fabric and NeoForge
+
+1) Wording about permission values in LuckPerms
+
 ### 1.0.0
 ##### Minecraft 1.21.x, 26.1-26.3, Fabric and NeoForge
 

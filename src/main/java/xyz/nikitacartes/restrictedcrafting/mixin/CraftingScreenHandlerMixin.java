@@ -13,7 +13,7 @@ import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.allowedFor;
 import static xyz.nikitacartes.restrictedcrafting.RestrictedCrafting.recipeId;
 
 /**
- * The real gate: deny here and the result slot stays empty (3x3, 2x2, special recipes).
+ * The real gate: block here and the result slot stays empty (3x3, 2x2, special recipes).
  * WrapMethod nests with other mods wrapping the same method.
  */
 @Mixin(RecipeCraftingHolder.class)

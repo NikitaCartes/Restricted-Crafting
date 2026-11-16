@@ -3,12 +3,12 @@
 ![screenshot.png](screenshot.png)
 
 A server-side mod that restricts **crafting** based on LuckPerms permissions.
-There are two ways to prevert crafting something.
+There are three ways to prevent crafting something.
 
-**By recipe**: deny `restricted-crafting.<recipe_id>`. 
+**By recipe**: set `restricted-crafting.<recipe_id>` to `false`. 
 For example, to stop players crafting iron ingots from nuggets, set `restricted-crafting.minecraft:iron_ingot_from_nuggets` to `false`. Other recipes for the same item stay craftable.
 
-**By output item**: deny `restricted-crafting.item.<item_id>`.
+**By output item**: set `restricted-crafting.item.<item_id>` to `false`.
 To stop players crafting an iron ingot by any recipe at all, set `restricted-crafting.item.minecraft:iron_ingot` to `false`.
 
 You can get all recipes by running `/restrictedcrafting dump` to list them, or find recipe ids in [misode/mcmeta](https://github.com/misode/mcmeta/tree/data-json/data/minecraft/recipe).
@@ -18,7 +18,7 @@ Restrict those by recipe id.
 
 ### Crafter (auto-crafter)
 
-Deny `restricted-crafting.crafter.<recipe_id>` or `restricted-crafting.crafter.item.<item_id>` in the `default` group to stop the Crafter making it.
+Set `restricted-crafting.crafter.<recipe_id>` or `restricted-crafting.crafter.item.<item_id>` to `false` in the `default` group to stop the Crafter making it.
 
 [CurseForge](https://legacy.curseforge.com/minecraft/mc-mods/restricted-crafting), [Modrinth](https://modrinth.com/mod/restricted-crafting)
 

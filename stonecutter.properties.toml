@@ -5,7 +5,7 @@
 # Mod
 mod_name = "Restricted Crafting"
 mod_id = "restricted-crafting"
-mod_version = "1.0.0"
+mod_version = "1.0.1"
 
 # Shared dependencies
 # LuckPerms platform-agnostic API (compileOnly; provided at runtime by the LuckPerms mod).
